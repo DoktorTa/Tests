@@ -5,11 +5,10 @@ from typing import Any
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine, AsyncSession
 from sqlalchemy.orm import DeclarativeBase
 
-
 class Base(DeclarativeBase):
     pass
 
-
+print('DB URL', os.getenv('DATABASE_URL'))
 async_engine = create_async_engine(os.getenv('DATABASE_URL'), echo=False)
 async_session = async_sessionmaker(async_engine, expire_on_commit=False)
 
@@ -22,5 +21,7 @@ async def get_session() -> AsyncGenerator[AsyncSession, Any]:
 
 async def create_models() -> None:
     """ Создает таблицы в бд, если они не созданы """
+    print('Start models create')
     async with async_engine.begin() as conn:
+        print('models create p 1', Base.metadata.info)
         await conn.run_sync(Base.metadata.create_all)
