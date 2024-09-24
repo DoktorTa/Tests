@@ -1,16 +1,16 @@
-import os
 import asyncio
+import os
 
 from dotenv import load_dotenv
+from fastapi import FastAPI
 
-from src.main.db.base import create_models
-from src.main.stock.db import models
+from src.main.stock.api.router import router as stock_router
+from src.main.stock.db.utils import create_many_goods
 
-print('Start')
 dotenv_path = os.path.join(os.path.dirname(__file__), 'dev.env')
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
-print('DB start connections')
-asyncio.run(create_models())
-print('End')
+KTS = FastAPI()
+KTS.include_router(stock_router)
+# asyncio.run(create_many_goods())

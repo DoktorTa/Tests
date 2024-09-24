@@ -2,20 +2,23 @@ import os
 from collections.abc import AsyncGenerator
 from typing import Any
 
+from asyncpg.transaction import ISOLATION_LEVELS
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine, AsyncSession
 from sqlalchemy.orm import DeclarativeBase
 
 class Base(DeclarativeBase):
     pass
 
-print('DB URL', os.getenv('DATABASE_URL'))
-async_engine = create_async_engine(os.getenv('DATABASE_URL'), echo=False)
+async_engine = create_async_engine(
+    os.getenv('DATABASE_URL'),
+    echo=False,
+    isolation_level='serializable'
+)
 async_session = async_sessionmaker(async_engine, expire_on_commit=False)
 
 
-async def get_session() -> AsyncGenerator[AsyncSession, Any]:
-    """ Получить сессию """
-    async with async_session() as session, session.begin():
+async def get_session() -> AsyncSession:
+    async with async_session() as session:
         yield session
 
 
