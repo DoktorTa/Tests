@@ -13,4 +13,10 @@ class ReservationRequest(BaseModel):
 class ReservationResponse(BaseModel):
     status: str
     message: str
-    reservation_id: int
+    reservation_id: str
+
+
+class StatusResponse(BaseModel):
+    status: str
+    message: str
+    reservation_id: str
