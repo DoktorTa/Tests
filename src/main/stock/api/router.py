@@ -20,7 +20,7 @@ async def create_reservation(reservation_request: ReservationRequest) -> Reserva
 
 
 @router.get('/status/{reservation_id}', response_model=None)
-async def create_reservation(reservation_id: str) -> StatusResponse | HTTPException:
+async def get_status_reservation(reservation_id: str) -> StatusResponse | HTTPException:
     response = await get_status_reservation(reservation_id)
 
     if response.status == StatusCodeResponseStatus.FOUND:
